@@ -29,6 +29,12 @@ const startServer = async () => {
       console.log('   PUT  /api/users/profile - Update user profile');
       console.log('   GET  /api/users/balance - Get current balance');
       console.log('   PUT  /api/users/balance - Update balance');
+      console.log('   POST /api/transactions - Create transaction');
+      console.log('   GET  /api/transactions - Get all transactions');
+      console.log('   GET  /api/transactions/stats - Get transaction stats');
+      console.log('   GET  /api/transactions/:id - Get transaction by ID');
+      console.log('   PUT  /api/transactions/:id - Update transaction');
+      console.log('   DELETE /api/transactions/:id - Delete transaction');
       console.log('✨ Ready to handle requests!');
     });
 

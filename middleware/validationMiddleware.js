@@ -81,6 +81,57 @@ const validateBalanceUpdate = [
   handleValidationErrors
 ];
 
+// Validation rules for transaction creation
+const validateTransactionCreation = [
+  body('transactionType')
+    .isIn(['credit', 'debit'])
+    .withMessage('Transaction type must be either credit or debit'),
+  
+  body('amount')
+    .isFloat({ min: 0.01, max: 1000000 })
+    .withMessage('Amount must be a positive number between 0.01 and 1,000,000'),
+  
+  body('description')
+    .trim()
+    .isLength({ min: 3, max: 200 })
+    .withMessage('Description must be between 3 and 200 characters'),
+  
+  body('category')
+    .optional()
+    .trim()
+    .isLength({ max: 50 })
+    .withMessage('Category cannot exceed 50 characters'),
+  
+  body('transactionDate')
+    .optional()
+    .isISO8601()
+    .withMessage('Transaction date must be a valid ISO 8601 date format'),
+  
+  handleValidationErrors
+];
+
+// Validation rules for transaction update
+const validateTransactionUpdate = [
+  body('description')
+    .optional()
+    .trim()
+    .isLength({ min: 3, max: 200 })
+    .withMessage('Description must be between 3 and 200 characters'),
+  
+  body('category')
+    .optional()
+    .trim()
+    .isLength({ max: 50 })
+    .withMessage('Category cannot exceed 50 characters'),
+  
+  body('transactionDate')
+    .optional()
+    .isISO8601()
+    .withMessage('Transaction date must be a valid ISO 8601 date format'),
+  
+  handleValidationErrors
+];
+
 // Validation rules for profile update
 const validateProfileUpdate = [
   body('fullName')
@@ -103,6 +154,8 @@ module.exports = {
   validateUserRegistration,
   validateUserLogin,
   validateBalanceUpdate,
+  validateTransactionCreation,
+  validateTransactionUpdate,
   validateProfileUpdate,
   handleValidationErrors
 };

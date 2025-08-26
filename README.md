@@ -85,10 +85,21 @@ The primary goal of this application is to help users:
 
 | Method | Endpoint | Description | Authentication Required |
 |--------|----------|-------------|------------------------|
-| GET | `/api/balance` | Get current balance | Yes |
-| PUT | `/api/balance` | Update balance | Yes |
+| GET | `/api/users/balance` | Get current balance | Yes |
+| PUT | `/api/users/balance` | Update balance | Yes |
 
-*Note: More endpoints will be added as the project progresses for transaction management, categories, and reporting.*
+### Transaction Management Endpoints
+
+| Method | Endpoint | Description | Authentication Required |
+|--------|----------|-------------|------------------------|
+| POST | `/api/transactions` | Create new transaction | Yes |
+| GET | `/api/transactions` | Get all transactions (with pagination & filtering) | Yes |
+| GET | `/api/transactions/stats` | Get transaction statistics | Yes |
+| GET | `/api/transactions/:id` | Get transaction by ID | Yes |
+| PUT | `/api/transactions/:id` | Update transaction | Yes |
+| DELETE | `/api/transactions/:id` | Delete transaction | Yes |
+
+*Note: Transaction endpoints support pagination, filtering by type/category/date range, and sorting options.*
 
 ## Project Structure
 
@@ -135,6 +146,10 @@ The API documentation is available at `http://localhost:3000/api-docs` when the 
 - Protected routes with middleware
 - Environment variable management
 - Input validation and sanitization
+- HTTP security headers with Helmet
+- Rate limiting to prevent abuse
+- Input sanitization to prevent injection attacks
+- CORS protection
 
 ## Author
 
