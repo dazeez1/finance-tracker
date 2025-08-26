@@ -51,7 +51,8 @@ The primary goal of this application is to help users:
    ```
 
 5. **Access the application:**
-   Open your browser and navigate to `http://localhost:3000`
+   - **API Documentation**: Open your browser and navigate to `http://localhost:3000/api-docs`
+   - **Health Check**: `http://localhost:3000/health`
 
 ## Technologies Used
 
@@ -60,6 +61,7 @@ The primary goal of this application is to help users:
 - **Authentication**: JWT (JSON Web Tokens) with bcrypt
 - **Environment Management**: dotenv
 - **Development Tools**: nodemon, ESLint, Prettier
+- **API Documentation**: Swagger UI
 - **Testing**: Jest (planned)
 
 ## API Endpoints
@@ -115,6 +117,16 @@ finance-tracker/
 - `npm test` - Run tests (when implemented)
 - `npm run lint` - Run ESLint
 - `npm run format` - Format code with Prettier
+
+### API Documentation
+
+The API documentation is available at `http://localhost:3000/api-docs` when the server is running. This interactive Swagger UI allows you to:
+
+- View all available endpoints
+- Test API calls directly from the browser
+- See request/response schemas
+- Authenticate with JWT tokens
+- View example requests and responses
 
 ## Security Features
 

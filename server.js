@@ -19,6 +19,7 @@ const startServer = async () => {
       console.log(`📍 Server running on port: ${PORT}`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
       console.log(`📊 Health check: http://localhost:${PORT}/health`);
+      console.log(`📚 API Documentation: http://localhost:${PORT}/api-docs`);
       console.log(`🔗 API Base URL: http://localhost:${PORT}/api`);
       console.log('📝 Available endpoints:');
       console.log('   POST /api/auth/signup - Register new user');

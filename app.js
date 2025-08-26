@@ -2,11 +2,15 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const swaggerUi = require('swagger-ui-express');
 require('dotenv').config();
 
 // Import routes
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+
+// Import Swagger configuration
+const swaggerSpecs = require('./config/swagger');
 
 // Create Express app
 const app = express();
@@ -56,6 +60,20 @@ app.get('/health', (request, response) => {
   });
 });
 
+// Swagger UI setup
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
+  customCss: '.swagger-ui .topbar { display: none }',
+  customSiteTitle: 'Finance Tracker API Documentation',
+  customfavIcon: '/favicon.ico',
+  swaggerOptions: {
+    persistAuthorization: true,
+    displayRequestDuration: true,
+    filter: true,
+    showExtensions: true,
+    showCommonExtensions: true
+  }
+}));
+
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
@@ -67,6 +85,7 @@ app.use('*', (request, response) => {
     message: 'API endpoint not found',
     availableEndpoints: {
       health: 'GET /health',
+      apiDocs: 'GET /api-docs',
       auth: {
         signup: 'POST /api/auth/signup',
         login: 'POST /api/auth/login',
