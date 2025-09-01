@@ -1,0 +1,6890 @@
+{
+  "collection": {
+    "item": [
+      {
+        "id": "1145f32b-f62b-4bd6-8297-bac15d62ad57",
+        "name": "Health Check",
+        "request": {
+          "description": {
+            "content": "Check if the API server is running",
+            "type": "text/plain"
+          },
+          "url": {
+            "path": [
+              "health"
+            ],
+            "host": [
+              "{{baseUrl}}"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "method": "GET"
+        },
+        "response": [],
+        "event": []
+      },
+      {
+        "id": "a3525f65-0fdd-471a-8636-7b37b8af0d2a",
+        "name": "Authentication",
+        "description": {
+          "content": "Authentication endpoints for user registration and login",
+          "type": "text/plain"
+        },
+        "item": [
+          {
+            "id": "ec56177f-13aa-4683-afae-83e5f3c523eb",
+            "name": "Register User",
+            "request": {
+              "description": {
+                "content": "Register a new user account",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "auth",
+                  "signup"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"fullName\": \"John Doe\",\n  \"emailAddress\": \"john.doe@example.com\",\n  \"accountType\": \"personal\",\n  \"password\": \"SecurePass123\"\n}"
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "cfa69e74-1c2e-4a78-9e40-14dbf8a41df7",
+                  "type": "text/javascript",
+                  "exec": [
+                    "if (pm.response.code === 201) {",
+                    "    const response = pm.response.json();",
+                    "    if (response.success && response.data.authToken) {",
+                    "        pm.collectionVariables.set('authToken', response.data.authToken);",
+                    "        pm.collectionVariables.set('userId', response.data.user.userId);",
+                    "        console.log('User registered and token saved');",
+                    "    }",
+                    "}"
+                  ],
+                  "_lastExecutionId": "f09f0c5d-b97d-4c0d-a5e1-1315c976f07f"
+                }
+              }
+            ]
+          },
+          {
+            "id": "f6056c8b-666c-43ff-b897-694ff3cbd304",
+            "name": "Login User",
+            "request": {
+              "description": {
+                "content": "Login with existing user credentials",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "auth",
+                  "login"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"emailAddress\": \"john.doe@example.com\",\n  \"password\": \"SecurePass123\"\n}"
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "73925827-520c-4f2f-861e-ea7cce1ed4c1",
+                  "type": "text/javascript",
+                  "exec": [
+                    "if (pm.response.code === 200) {",
+                    "    const response = pm.response.json();",
+                    "    if (response.success && response.data.authToken) {",
+                    "        pm.collectionVariables.set('authToken', response.data.authToken);",
+                    "        pm.collectionVariables.set('userId', response.data.user.userId);",
+                    "        console.log('User logged in and token saved');",
+                    "    }",
+                    "}"
+                  ],
+                  "_lastExecutionId": "37e2b0ef-6694-496a-9946-1d4c1da44510"
+                }
+              }
+            ]
+          },
+          {
+            "id": "6cb43909-d2f8-48a1-a467-41a9fc2ac4e4",
+            "name": "Get User Profile",
+            "request": {
+              "description": {
+                "content": "Get current user profile (requires authentication)",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "auth",
+                  "profile"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": []
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "6c54c8e4-6dc3-4b37-8172-9b43ddb7e07f",
+        "name": "User Management",
+        "description": {
+          "content": "User profile and balance management endpoints",
+          "type": "text/plain"
+        },
+        "item": [
+          {
+            "id": "d050c7e2-adbc-4d28-8dc7-f1ba2b94d616",
+            "name": "Get User Profile & Balance",
+            "request": {
+              "description": {
+                "content": "Get user profile and current balance",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "users",
+                  "profile"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "598a7cb3-2639-4156-83de-a089bb425023",
+            "name": "Update User Profile",
+            "request": {
+              "description": {
+                "content": "Update user profile information",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "users",
+                  "profile"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "PUT",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"fullName\": \"Jane Doe\",\n  \"accountType\": \"business\"\n}"
+              }
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "9ef4e2d6-7aa6-4e7c-8e4f-feeb92e7d80e",
+            "name": "Get Current Balance",
+            "request": {
+              "description": {
+                "content": "Get current account balance",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "users",
+                  "balance"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "2040026b-6f1d-4de3-8ac4-bcab0b0e1778",
+            "name": "Update Balance",
+            "request": {
+              "description": {
+                "content": "Update account balance (add/subtract amount)",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "users",
+                  "balance"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "PUT",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"amount\": 1000,\n  \"description\": \"Initial deposit\"\n}"
+              }
+            },
+            "response": [],
+            "event": []
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "7a9e9c34-1da6-4006-b350-65ce0a57172c",
+        "name": "Transactions",
+        "description": {
+          "content": "Transaction CRUD operations with pagination and filtering",
+          "type": "text/plain"
+        },
+        "item": [
+          {
+            "id": "11b7fa0f-32e3-4b5e-a3cf-d3e783452c85",
+            "name": "Create Credit Transaction",
+            "request": {
+              "description": {
+                "content": "Create a new credit transaction",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"transactionType\": \"credit\",\n  \"amount\": 500.00,\n  \"description\": \"Salary deposit\",\n  \"category\": \"Income\",\n  \"transactionDate\": \"2024-01-15T10:30:00Z\"\n}"
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "b5a134dc-5a37-432b-a562-14778966ea31",
+                  "type": "text/javascript",
+                  "exec": [
+                    "if (pm.response.code === 201) {",
+                    "    const response = pm.response.json();",
+                    "    if (response.success && response.data.transaction) {",
+                    "        pm.collectionVariables.set('transactionId', response.data.transaction.transactionId);",
+                    "        console.log('Transaction created with ID: ' + response.data.transaction.transactionId);",
+                    "    }",
+                    "}"
+                  ],
+                  "_lastExecutionId": "58d19904-0116-4ecf-b279-41f72619a9f5"
+                }
+              }
+            ]
+          },
+          {
+            "id": "17731302-80e7-486a-b2b3-e1267d569a06",
+            "name": "Create Debit Transaction",
+            "request": {
+              "description": {
+                "content": "Create a new debit transaction",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"transactionType\": \"debit\",\n  \"amount\": 75.50,\n  \"description\": \"Grocery shopping\",\n  \"category\": \"Food\"\n}"
+              }
+            },
+            "response": [],
+            "event": [
+              {
+                "listen": "test",
+                "script": {
+                  "id": "6e674009-7efc-411e-ae02-784b7142b17c",
+                  "type": "text/javascript",
+                  "exec": [
+                    "if (pm.response.code === 201) {",
+                    "    const response = pm.response.json();",
+                    "    if (response.success && response.data.transaction) {",
+                    "        pm.collectionVariables.set('transactionId', response.data.transaction.transactionId);",
+                    "        console.log('Transaction created with ID: ' + response.data.transaction.transactionId);",
+                    "    }",
+                    "}"
+                  ],
+                  "_lastExecutionId": "84c0c83d-3098-4684-bc7e-c2a4cbe14bbc"
+                }
+              }
+            ]
+          },
+          {
+            "id": "f7251487-3b7d-4a57-a9ee-6de71f4f8cc9",
+            "name": "Get All Transactions",
+            "request": {
+              "description": {
+                "content": "Get all transactions with pagination",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [
+                  {
+                    "key": "page",
+                    "value": "1"
+                  },
+                  {
+                    "key": "limit",
+                    "value": "10"
+                  }
+                ],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "d5edac8c-1445-44ef-a07f-2dc52969bea0",
+            "name": "Get Transactions with Filtering",
+            "request": {
+              "description": {
+                "content": "Get transactions filtered by type and category",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [
+                  {
+                    "key": "transactionType",
+                    "value": "credit"
+                  },
+                  {
+                    "key": "category",
+                    "value": "Income"
+                  },
+                  {
+                    "key": "page",
+                    "value": "1"
+                  },
+                  {
+                    "key": "limit",
+                    "value": "5"
+                  }
+                ],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "20656214-e050-42d7-b811-a40e6a731a97",
+            "name": "Get Transactions by Date Range",
+            "request": {
+              "description": {
+                "content": "Get transactions within a date range with sorting",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [
+                  {
+                    "key": "startDate",
+                    "value": "2024-01-01"
+                  },
+                  {
+                    "key": "endDate",
+                    "value": "2024-01-31"
+                  },
+                  {
+                    "key": "sortBy",
+                    "value": "transactionDate"
+                  },
+                  {
+                    "key": "sortOrder",
+                    "value": "desc"
+                  }
+                ],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "88567163-1824-4f7f-b469-2cd1e3f23126",
+            "name": "Get Transaction Statistics",
+            "request": {
+              "description": {
+                "content": "Get transaction statistics and analytics",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions",
+                  "stats"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "1019a89e-7c79-405d-9c43-18b68486049a",
+            "name": "Get Transaction by ID",
+            "request": {
+              "description": {
+                "content": "Get a specific transaction by ID",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions",
+                  "{{transactionId}}"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "afdc4e89-aadc-4c68-8879-b5a4264dcd8f",
+            "name": "Update Transaction",
+            "request": {
+              "description": {
+                "content": "Update transaction details (description, category, date)",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions",
+                  "{{transactionId}}"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "PUT",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"description\": \"Updated salary deposit\",\n  \"category\": \"Salary\",\n  \"transactionDate\": \"2024-01-15T10:30:00Z\"\n}"
+              }
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "63180f30-9c9c-47c3-a013-af4a5854814a",
+            "name": "Delete Transaction",
+            "request": {
+              "description": {
+                "content": "Delete a transaction (soft delete)",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions",
+                  "{{transactionId}}"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "DELETE"
+            },
+            "response": [],
+            "event": []
+          }
+        ],
+        "event": []
+      },
+      {
+        "id": "835e1339-7f09-471e-89f7-3afb5ca1b928",
+        "name": "Error Testing",
+        "description": {
+          "content": "Test error scenarios and validation",
+          "type": "text/plain"
+        },
+        "item": [
+          {
+            "id": "c707a877-aa03-418e-8d6c-1e5f82d23c24",
+            "name": "Invalid Login",
+            "request": {
+              "description": {
+                "content": "Test invalid login credentials",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "auth",
+                  "login"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"emailAddress\": \"invalid@example.com\",\n  \"password\": \"wrongpassword\"\n}"
+              }
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "af9f5d5a-2e28-4332-896f-54362444e46e",
+            "name": "Invalid Transaction Data",
+            "request": {
+              "description": {
+                "content": "Test transaction validation errors",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "transactions"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "method": "POST",
+              "body": {
+                "mode": "raw",
+                "raw": "{\n  \"transactionType\": \"invalid\",\n  \"amount\": -100,\n  \"description\": \"ab\"\n}"
+              }
+            },
+            "response": [],
+            "event": []
+          },
+          {
+            "id": "68824b34-88a2-419e-9a57-5650d6144c44",
+            "name": "Unauthorized Access",
+            "request": {
+              "description": {
+                "content": "Test access without authentication token",
+                "type": "text/plain"
+              },
+              "url": {
+                "path": [
+                  "api",
+                  "users",
+                  "profile"
+                ],
+                "host": [
+                  "{{baseUrl}}"
+                ],
+                "query": [],
+                "variable": []
+              },
+              "method": "GET"
+            },
+            "response": [],
+            "event": []
+          }
+        ],
+        "event": []
+      }
+    ],
+    "auth": {
+      "type": "bearer",
+      "bearer": [
+        {
+          "type": "string",
+          "value": "{{authToken}}",
+          "key": "token"
+        }
+      ]
+    },
+    "event": [],
+    "variable": [
+      {
+        "type": "string",
+        "value": "http://localhost:3000",
+        "key": "baseUrl"
+      },
+      {
+        "type": "string",
+        "value": "",
+        "key": "authToken"
+      },
+      {
+        "type": "string",
+        "value": "",
+        "key": "userId"
+      },
+      {
+        "type": "string",
+        "value": "",
+        "key": "transactionId"
+      }
+    ],
+    "info": {
+      "_postman_id": "8acc06c7-abfc-49a9-833c-c4f69526fa26",
+      "name": "Finance Tracker API",
+      "version": {
+        "raw": "1.0.0",
+        "major": 1,
+        "minor": 0,
+        "patch": 0,
+        "prerelease": [],
+        "build": [],
+        "string": "1.0.0"
+      },
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+      "description": {
+        "content": "Complete Postman collection for testing the Finance Tracker API with authentication, user management, and transaction CRUD operations.",
+        "type": "text/plain"
+      }
+    }
+  },
+  "environment": {
+    "id": "2214fa4d-7977-4d04-a374-98b194b394fc",
+    "name": "Finance Tracker Environment",
+    "values": [
+      {
+        "type": "any",
+        "value": "http://localhost:3000",
+        "key": "baseUrl"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "authToken"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "userId"
+      },
+      {
+        "type": "any",
+        "value": "",
+        "key": "transactionId"
+      },
+      {
+        "type": "any",
+        "value": "john.doe@example.com",
+        "key": "userEmail"
+      },
+      {
+        "type": "any",
+        "value": "SecurePass123",
+        "key": "userPassword"
+      }
+    ]
+  },
+  "globals": {
+    "id": "64c94edc-94a8-4684-babe-73af8053590f",
+    "values": []
+  },
+  "run": {
+    "stats": {
+      "iterations": {
+        "total": 1,
+        "pending": 0,
+        "failed": 0
+      },
+      "items": {
+        "total": 20,
+        "pending": 0,
+        "failed": 0
+      },
+      "scripts": {
+        "total": 4,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequests": {
+        "total": 20,
+        "pending": 0,
+        "failed": 0
+      },
+      "requests": {
+        "total": 20,
+        "pending": 0,
+        "failed": 0
+      },
+      "tests": {
+        "total": 20,
+        "pending": 0,
+        "failed": 0
+      },
+      "assertions": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      },
+      "testScripts": {
+        "total": 4,
+        "pending": 0,
+        "failed": 0
+      },
+      "prerequestScripts": {
+        "total": 0,
+        "pending": 0,
+        "failed": 0
+      }
+    },
+    "timings": {
+      "responseAverage": 41,
+      "responseMin": 2,
+      "responseMax": 428,
+      "responseSd": 97.72665961752709,
+      "dnsAverage": 1.9278989999997975,
+      "dnsMin": 1.9278989999997975,
+      "dnsMax": 1.9278989999997975,
+      "dnsSd": 0,
+      "firstByteAverage": 36.91287710000013,
+      "firstByteMin": 0.9885510000021895,
+      "firstByteMax": 425.2314749999996,
+      "firstByteSd": 97.79025850554103,
+      "started": 1756745092075,
+      "completed": 1756745113375
+    },
+    "executions": [
+      {
+        "cursor": {
+          "position": 0,
+          "iteration": 0,
+          "length": 20,
+          "cycles": 1,
+          "empty": false,
+          "eof": false,
+          "bof": true,
+          "cr": false,
+          "ref": "18c7ad61-2454-4e32-b3cf-3b5aa804ab41",
+          "httpRequestId": "eb9c771e-d66e-4686-8581-dbeeab4dd75e"
+        },
+        "item": {
+          "id": "1145f32b-f62b-4bd6-8297-bac15d62ad57",
+          "name": "Health Check",
+          "request": {
+            "description": {
+              "content": "Check if the API server is running",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Check if the API server is running",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "health"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "3b9388ad-0c2a-40c7-98f8-832ff975eed3",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "30966857-349f-4807-b755-ad4b305cfc6e",
+          "status": "OK",
+          "code": 200,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "126"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"7e-hX6j4bC/JNQZJh/8GiOjCmHE/dA\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:44:53 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              116,
+              114,
+              117,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              70,
+              105,
+              110,
+              97,
+              110,
+              99,
+              101,
+              32,
+              84,
+              114,
+              97,
+              99,
+              107,
+              101,
+              114,
+              32,
+              65,
+              80,
+              73,
+              32,
+              105,
+              115,
+              32,
+              114,
+              117,
+              110,
+              110,
+              105,
+              110,
+              103,
+              34,
+              44,
+              34,
+              116,
+              105,
+              109,
+              101,
+              115,
+              116,
+              97,
+              109,
+              112,
+              34,
+              58,
+              34,
+              50,
+              48,
+              50,
+              53,
+              45,
+              48,
+              57,
+              45,
+              48,
+              49,
+              84,
+              49,
+              54,
+              58,
+              52,
+              52,
+              58,
+              53,
+              51,
+              46,
+              49,
+              51,
+              50,
+              90,
+              34,
+              44,
+              34,
+              101,
+              110,
+              118,
+              105,
+              114,
+              111,
+              110,
+              109,
+              101,
+              110,
+              116,
+              34,
+              58,
+              34,
+              100,
+              101,
+              118,
+              101,
+              108,
+              111,
+              112,
+              109,
+              101,
+              110,
+              116,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 38,
+          "responseSize": 126
+        },
+        "id": "1145f32b-f62b-4bd6-8297-bac15d62ad57"
+      },
+      {
+        "cursor": {
+          "ref": "cbcd8a46-d4d1-439e-bd22-bfb6594ac005",
+          "length": 20,
+          "cycles": 1,
+          "position": 1,
+          "iteration": 0,
+          "httpRequestId": "b7856fcd-d928-4fb9-802e-efac4732b0c4"
+        },
+        "item": {
+          "id": "ec56177f-13aa-4683-afae-83e5f3c523eb",
+          "name": "Register User",
+          "request": {
+            "description": {
+              "content": "Register a new user account",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "auth",
+                "signup"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"John Doe\",\n  \"emailAddress\": \"john.doe@example.com\",\n  \"accountType\": \"personal\",\n  \"password\": \"SecurePass123\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "cfa69e74-1c2e-4a78-9e40-14dbf8a41df7",
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.authToken) {",
+                  "        pm.collectionVariables.set('authToken', response.data.authToken);",
+                  "        pm.collectionVariables.set('userId', response.data.user.userId);",
+                  "        console.log('User registered and token saved');",
+                  "    }",
+                  "}"
+                ],
+                "_lastExecutionId": "f09f0c5d-b97d-4c0d-a5e1-1315c976f07f"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Register a new user account",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "auth",
+              "signup"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "75c0a0a3-13db-4ac2-ad03-de8dbf889f04",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "130",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"fullName\": \"John Doe\",\n  \"emailAddress\": \"john.doe@example.com\",\n  \"accountType\": \"personal\",\n  \"password\": \"SecurePass123\"\n}"
+          },
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "0688918d-e94a-4af3-81dc-233f5c8c5826",
+          "status": "Bad Request",
+          "code": 400,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "5;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "5"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "4"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "900"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "79"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"4f-6FtuXd990e46oYlyFQVvrlHiuFI\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:44:54 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              110,
+              32,
+              97,
+              99,
+              99,
+              111,
+              117,
+              110,
+              116,
+              32,
+              119,
+              105,
+              116,
+              104,
+              32,
+              116,
+              104,
+              105,
+              115,
+              32,
+              101,
+              109,
+              97,
+              105,
+              108,
+              32,
+              97,
+              100,
+              100,
+              114,
+              101,
+              115,
+              115,
+              32,
+              97,
+              108,
+              114,
+              101,
+              97,
+              100,
+              121,
+              32,
+              101,
+              120,
+              105,
+              115,
+              116,
+              115,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 167,
+          "responseSize": 79
+        },
+        "id": "ec56177f-13aa-4683-afae-83e5f3c523eb"
+      },
+      {
+        "cursor": {
+          "ref": "e7fb6f2c-b6ee-4fd3-823c-ff46a2f746f8",
+          "length": 20,
+          "cycles": 1,
+          "position": 2,
+          "iteration": 0,
+          "httpRequestId": "33ae0cad-5430-42c6-8d91-d2fed02e0b43"
+        },
+        "item": {
+          "id": "f6056c8b-666c-43ff-b897-694ff3cbd304",
+          "name": "Login User",
+          "request": {
+            "description": {
+              "content": "Login with existing user credentials",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailAddress\": \"john.doe@example.com\",\n  \"password\": \"SecurePass123\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "73925827-520c-4f2f-861e-ea7cce1ed4c1",
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.authToken) {",
+                  "        pm.collectionVariables.set('authToken', response.data.authToken);",
+                  "        pm.collectionVariables.set('userId', response.data.user.userId);",
+                  "        console.log('User logged in and token saved');",
+                  "    }",
+                  "}"
+                ],
+                "_lastExecutionId": "37e2b0ef-6694-496a-9946-1d4c1da44510"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Login with existing user credentials",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "auth",
+              "login"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "82fd7a62-30e7-4eae-ad9e-ef40dc98e6c2",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "75",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"emailAddress\": \"john.doe@example.com\",\n  \"password\": \"SecurePass123\"\n}"
+          },
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "3efab0b2-fe8e-4100-b2fd-babe87960645",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "5;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "5"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "3"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "899"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-lQ62zpZfgtdJtpQAh9eSr7eGX5I\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:44:55 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              73,
+              110,
+              118,
+              97,
+              108,
+              105,
+              100,
+              32,
+              101,
+              109,
+              97,
+              105,
+              108,
+              32,
+              97,
+              100,
+              100,
+              114,
+              101,
+              115,
+              115,
+              32,
+              111,
+              114,
+              32,
+              112,
+              97,
+              115,
+              115,
+              119,
+              111,
+              114,
+              100,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 428,
+          "responseSize": 63
+        },
+        "id": "f6056c8b-666c-43ff-b897-694ff3cbd304"
+      },
+      {
+        "cursor": {
+          "ref": "499ca413-07c9-40f7-a056-4e2d48a53b30",
+          "length": 20,
+          "cycles": 1,
+          "position": 3,
+          "iteration": 0,
+          "httpRequestId": "25eab609-26d3-400b-b77b-5873dd059bde"
+        },
+        "item": {
+          "id": "6cb43909-d2f8-48a1-a467-41a9fc2ac4e4",
+          "name": "Get User Profile",
+          "request": {
+            "description": {
+              "content": "Get current user profile (requires authentication)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "auth",
+                "profile"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get current user profile (requires authentication)",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "auth",
+              "profile"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "2009c621-7f2e-4f56-b949-c9adba5a2bc3",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "95e3f652-61b5-4e42-9241-291e864ef79c",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "5;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "5"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "2"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "898"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:44:56 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 4,
+          "responseSize": 63
+        },
+        "id": "6cb43909-d2f8-48a1-a467-41a9fc2ac4e4"
+      },
+      {
+        "cursor": {
+          "ref": "9333ff44-f45b-4bad-8344-11b3539ba0de",
+          "length": 20,
+          "cycles": 1,
+          "position": 4,
+          "iteration": 0,
+          "httpRequestId": "e3224090-0e35-4a18-8ce6-41f4bd7afd29"
+        },
+        "item": {
+          "id": "d050c7e2-adbc-4d28-8dc7-f1ba2b94d616",
+          "name": "Get User Profile & Balance",
+          "request": {
+            "description": {
+              "content": "Get user profile and current balance",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get user profile and current balance",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "users",
+              "profile"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "ae0501d6-851f-41a0-8f28-033d5fc917d8",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "cb1e9924-ffbb-4a9e-bdeb-0152830ef600",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "96"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "897"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:44:57 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 6,
+          "responseSize": 63
+        },
+        "id": "d050c7e2-adbc-4d28-8dc7-f1ba2b94d616"
+      },
+      {
+        "cursor": {
+          "ref": "c24303f5-dc93-4116-8045-4aae9ffd9c9c",
+          "length": 20,
+          "cycles": 1,
+          "position": 5,
+          "iteration": 0,
+          "httpRequestId": "0562d93f-dd5d-4904-b855-002ccbeb1b4e"
+        },
+        "item": {
+          "id": "598a7cb3-2639-4156-83de-a089bb425023",
+          "name": "Update User Profile",
+          "request": {
+            "description": {
+              "content": "Update user profile information",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"fullName\": \"Jane Doe\",\n  \"accountType\": \"business\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Update user profile information",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "users",
+              "profile"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "5494538c-a27a-44c7-844f-5eb6afc287b8",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "57",
+              "system": true
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"fullName\": \"Jane Doe\",\n  \"accountType\": \"business\"\n}"
+          },
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "7f56b3d0-354a-4dd2-9e7b-e44f2f679805",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "95"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "896"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:44:58 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 4,
+          "responseSize": 63
+        },
+        "id": "598a7cb3-2639-4156-83de-a089bb425023"
+      },
+      {
+        "cursor": {
+          "ref": "df2579cd-a5d4-4290-976c-d6585d17980a",
+          "length": 20,
+          "cycles": 1,
+          "position": 6,
+          "iteration": 0,
+          "httpRequestId": "f1e3bbe0-25f9-4d6e-82d1-1bc9e2bb3ae2"
+        },
+        "item": {
+          "id": "9ef4e2d6-7aa6-4e7c-8e4f-feeb92e7d80e",
+          "name": "Get Current Balance",
+          "request": {
+            "description": {
+              "content": "Get current account balance",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "users",
+                "balance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get current account balance",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "users",
+              "balance"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "6a6b7b28-c492-4eab-bf25-b970063d72bf",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "aeaccaa9-e39c-41a6-9ece-9e751f51afe0",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "94"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "895"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:44:59 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 7,
+          "responseSize": 63
+        },
+        "id": "9ef4e2d6-7aa6-4e7c-8e4f-feeb92e7d80e"
+      },
+      {
+        "cursor": {
+          "ref": "296c0726-0af6-43b0-ae94-43703428ee47",
+          "length": 20,
+          "cycles": 1,
+          "position": 7,
+          "iteration": 0,
+          "httpRequestId": "03539c91-70b0-40ea-ab4d-584631d5baf1"
+        },
+        "item": {
+          "id": "2040026b-6f1d-4de3-8ac4-bcab0b0e1778",
+          "name": "Update Balance",
+          "request": {
+            "description": {
+              "content": "Update account balance (add/subtract amount)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "users",
+                "balance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": 1000,\n  \"description\": \"Initial deposit\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Update account balance (add/subtract amount)",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "users",
+              "balance"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "5bbe44a7-77a8-4485-a3f7-fc5d67caa8d0",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "56",
+              "system": true
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"amount\": 1000,\n  \"description\": \"Initial deposit\"\n}"
+          },
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "6388d976-8990-4c2a-89a1-fc41a15632e0",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "93"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "894"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:00 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 7,
+          "responseSize": 63
+        },
+        "id": "2040026b-6f1d-4de3-8ac4-bcab0b0e1778"
+      },
+      {
+        "cursor": {
+          "ref": "aa9da26d-b826-49bd-8fdc-abad1afe2cf4",
+          "length": 20,
+          "cycles": 1,
+          "position": 8,
+          "iteration": 0,
+          "httpRequestId": "e688da74-fee2-4cb6-b5ba-6bc2e2261b0d"
+        },
+        "item": {
+          "id": "11b7fa0f-32e3-4b5e-a3cf-d3e783452c85",
+          "name": "Create Credit Transaction",
+          "request": {
+            "description": {
+              "content": "Create a new credit transaction",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionType\": \"credit\",\n  \"amount\": 500.00,\n  \"description\": \"Salary deposit\",\n  \"category\": \"Income\",\n  \"transactionDate\": \"2024-01-15T10:30:00Z\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "b5a134dc-5a37-432b-a562-14778966ea31",
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.transaction) {",
+                  "        pm.collectionVariables.set('transactionId', response.data.transaction.transactionId);",
+                  "        console.log('Transaction created with ID: ' + response.data.transaction.transactionId);",
+                  "    }",
+                  "}"
+                ],
+                "_lastExecutionId": "58d19904-0116-4ecf-b279-41f72619a9f5"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Create a new credit transaction",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "69b40d07-b989-49a4-ae72-6bb978bdd3f0",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "157",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"transactionType\": \"credit\",\n  \"amount\": 500.00,\n  \"description\": \"Salary deposit\",\n  \"category\": \"Income\",\n  \"transactionDate\": \"2024-01-15T10:30:00Z\"\n}"
+          },
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "1c0dc9dc-0f20-4a98-9f70-af36f8eb98a6",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "92"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "893"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:02 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 9,
+          "responseSize": 63
+        },
+        "id": "11b7fa0f-32e3-4b5e-a3cf-d3e783452c85"
+      },
+      {
+        "cursor": {
+          "ref": "6695fe0e-ad5c-4b24-8133-b89a69d8e687",
+          "length": 20,
+          "cycles": 1,
+          "position": 9,
+          "iteration": 0,
+          "httpRequestId": "e3988080-cb83-4abd-a3e0-d627273f2d30"
+        },
+        "item": {
+          "id": "17731302-80e7-486a-b2b3-e1267d569a06",
+          "name": "Create Debit Transaction",
+          "request": {
+            "description": {
+              "content": "Create a new debit transaction",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionType\": \"debit\",\n  \"amount\": 75.50,\n  \"description\": \"Grocery shopping\",\n  \"category\": \"Food\"\n}"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "6e674009-7efc-411e-ae02-784b7142b17c",
+                "type": "text/javascript",
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    const response = pm.response.json();",
+                  "    if (response.success && response.data.transaction) {",
+                  "        pm.collectionVariables.set('transactionId', response.data.transaction.transactionId);",
+                  "        console.log('Transaction created with ID: ' + response.data.transaction.transactionId);",
+                  "    }",
+                  "}"
+                ],
+                "_lastExecutionId": "84c0c83d-3098-4684-bc7e-c2a4cbe14bbc"
+              }
+            }
+          ]
+        },
+        "request": {
+          "description": {
+            "content": "Create a new debit transaction",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "02e9f42d-1b9d-418a-b75f-e81d9bdc963f",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "110",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"transactionType\": \"debit\",\n  \"amount\": 75.50,\n  \"description\": \"Grocery shopping\",\n  \"category\": \"Food\"\n}"
+          },
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "523eff53-7994-4436-9156-0af87db10829",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "91"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "892"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:03 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 4,
+          "responseSize": 63
+        },
+        "id": "17731302-80e7-486a-b2b3-e1267d569a06"
+      },
+      {
+        "cursor": {
+          "ref": "7787cd0e-5aa6-4060-be4a-d79bacb70e77",
+          "length": 20,
+          "cycles": 1,
+          "position": 10,
+          "iteration": 0,
+          "httpRequestId": "bb6fc404-2bf4-473b-9406-e295217d34d5"
+        },
+        "item": {
+          "id": "f7251487-3b7d-4a57-a9ee-6de71f4f8cc9",
+          "name": "Get All Transactions",
+          "request": {
+            "description": {
+              "content": "Get all transactions with pagination",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get all transactions with pagination",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [
+              {
+                "key": "page",
+                "value": "1"
+              },
+              {
+                "key": "limit",
+                "value": "10"
+              }
+            ],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "334a19a5-3df7-48b9-a3f4-9cd02413501e",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "aa983b35-ac81-4d4d-b4b4-1c7cd29eb17c",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "90"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "891"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:04 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 4,
+          "responseSize": 63
+        },
+        "id": "f7251487-3b7d-4a57-a9ee-6de71f4f8cc9"
+      },
+      {
+        "cursor": {
+          "ref": "2fb74c40-bae2-46fa-91aa-a144e4862594",
+          "length": 20,
+          "cycles": 1,
+          "position": 11,
+          "iteration": 0,
+          "httpRequestId": "e7ba0a46-f958-46fa-a206-f911b49ccbb7"
+        },
+        "item": {
+          "id": "d5edac8c-1445-44ef-a07f-2dc52969bea0",
+          "name": "Get Transactions with Filtering",
+          "request": {
+            "description": {
+              "content": "Get transactions filtered by type and category",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "transactionType",
+                  "value": "credit"
+                },
+                {
+                  "key": "category",
+                  "value": "Income"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get transactions filtered by type and category",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [
+              {
+                "key": "transactionType",
+                "value": "credit"
+              },
+              {
+                "key": "category",
+                "value": "Income"
+              },
+              {
+                "key": "page",
+                "value": "1"
+              },
+              {
+                "key": "limit",
+                "value": "5"
+              }
+            ],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "448095e5-1980-444f-916e-098a41abefbe",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "9303f5c6-24f1-449b-adc4-494c4a875715",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "89"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "890"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:05 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 7,
+          "responseSize": 63
+        },
+        "id": "d5edac8c-1445-44ef-a07f-2dc52969bea0"
+      },
+      {
+        "cursor": {
+          "ref": "119d8722-ccab-4b00-ba28-ec03d7e6b017",
+          "length": 20,
+          "cycles": 1,
+          "position": 12,
+          "iteration": 0,
+          "httpRequestId": "078946e1-f052-46a8-87f4-bf2d3afc5644"
+        },
+        "item": {
+          "id": "20656214-e050-42d7-b811-a40e6a731a97",
+          "name": "Get Transactions by Date Range",
+          "request": {
+            "description": {
+              "content": "Get transactions within a date range with sorting",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "key": "startDate",
+                  "value": "2024-01-01"
+                },
+                {
+                  "key": "endDate",
+                  "value": "2024-01-31"
+                },
+                {
+                  "key": "sortBy",
+                  "value": "transactionDate"
+                },
+                {
+                  "key": "sortOrder",
+                  "value": "desc"
+                }
+              ],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get transactions within a date range with sorting",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [
+              {
+                "key": "startDate",
+                "value": "2024-01-01"
+              },
+              {
+                "key": "endDate",
+                "value": "2024-01-31"
+              },
+              {
+                "key": "sortBy",
+                "value": "transactionDate"
+              },
+              {
+                "key": "sortOrder",
+                "value": "desc"
+              }
+            ],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "faa31348-38de-4dcd-9f22-011669f34639",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "1cd9372f-b953-4f6d-b5dc-69a0e9c18bdd",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "88"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "889"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:06 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 5,
+          "responseSize": 63
+        },
+        "id": "20656214-e050-42d7-b811-a40e6a731a97"
+      },
+      {
+        "cursor": {
+          "ref": "4949f7d6-89e6-49f4-821c-2c6f4fe44621",
+          "length": 20,
+          "cycles": 1,
+          "position": 13,
+          "iteration": 0,
+          "httpRequestId": "9d6e801b-4c5b-4042-b8ef-9d0f902fafbf"
+        },
+        "item": {
+          "id": "88567163-1824-4f7f-b469-2cd1e3f23126",
+          "name": "Get Transaction Statistics",
+          "request": {
+            "description": {
+              "content": "Get transaction statistics and analytics",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions",
+                "stats"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get transaction statistics and analytics",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions",
+              "stats"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "5d74fc34-5c79-4478-a479-f9d8e0d50a15",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "002abe1f-f178-4a93-9de6-309e8e885499",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "87"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "888"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:07 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 7,
+          "responseSize": 63
+        },
+        "id": "88567163-1824-4f7f-b469-2cd1e3f23126"
+      },
+      {
+        "cursor": {
+          "ref": "0f1bab23-0874-4376-b8fb-2518cab34056",
+          "length": 20,
+          "cycles": 1,
+          "position": 14,
+          "iteration": 0,
+          "httpRequestId": "a36e0115-9204-4bee-86fd-de2fa22e850a"
+        },
+        "item": {
+          "id": "1019a89e-7c79-405d-9c43-18b68486049a",
+          "name": "Get Transaction by ID",
+          "request": {
+            "description": {
+              "content": "Get a specific transaction by ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions",
+                "{{transactionId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Get a specific transaction by ID",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions",
+              ""
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "cb428998-4c35-4ad4-a116-31c847d80856",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "49349fa4-7dcb-46e7-a9ab-79508d6d08a9",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "86"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "887"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:08 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 2,
+          "responseSize": 63
+        },
+        "id": "1019a89e-7c79-405d-9c43-18b68486049a"
+      },
+      {
+        "cursor": {
+          "ref": "dfcb0be8-fb08-437f-b9a9-0b5f846bd9a4",
+          "length": 20,
+          "cycles": 1,
+          "position": 15,
+          "iteration": 0,
+          "httpRequestId": "34cca7c5-111b-416b-8538-d44ce6217ff6"
+        },
+        "item": {
+          "id": "afdc4e89-aadc-4c68-8879-b5a4264dcd8f",
+          "name": "Update Transaction",
+          "request": {
+            "description": {
+              "content": "Update transaction details (description, category, date)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions",
+                "{{transactionId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Updated salary deposit\",\n  \"category\": \"Salary\",\n  \"transactionDate\": \"2024-01-15T10:30:00Z\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Update transaction details (description, category, date)",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions",
+              ""
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "64c1a023-7ae1-4c5a-abe8-e5b698824344",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "114",
+              "system": true
+            }
+          ],
+          "method": "PUT",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"description\": \"Updated salary deposit\",\n  \"category\": \"Salary\",\n  \"transactionDate\": \"2024-01-15T10:30:00Z\"\n}"
+          },
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "5ee6e449-dc87-4732-9c76-df6cd3f83ddb",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "85"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "886"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:09 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 3,
+          "responseSize": 63
+        },
+        "id": "afdc4e89-aadc-4c68-8879-b5a4264dcd8f"
+      },
+      {
+        "cursor": {
+          "ref": "62239f2b-de5b-4b75-9a75-ec190d873e23",
+          "length": 20,
+          "cycles": 1,
+          "position": 16,
+          "iteration": 0,
+          "httpRequestId": "98ce4cdd-135e-407d-9b0e-a216e90f87e1"
+        },
+        "item": {
+          "id": "63180f30-9c9c-47c3-a013-af4a5854814a",
+          "name": "Delete Transaction",
+          "request": {
+            "description": {
+              "content": "Delete a transaction (soft delete)",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions",
+                "{{transactionId}}"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "DELETE"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Delete a transaction (soft delete)",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions",
+              ""
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "00c66ac4-220b-441d-b433-74781d22059d",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "DELETE",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "730a028c-f87e-43d3-97df-d2b24e206f33",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "84"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "884"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:10 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 3,
+          "responseSize": 63
+        },
+        "id": "63180f30-9c9c-47c3-a013-af4a5854814a"
+      },
+      {
+        "cursor": {
+          "ref": "2b22c7b5-5396-48f1-adb1-24ba63f0d6cf",
+          "length": 20,
+          "cycles": 1,
+          "position": 17,
+          "iteration": 0,
+          "httpRequestId": "98f6fa73-b3ef-4e1e-98fb-7a6e28c41c3a"
+        },
+        "item": {
+          "id": "c707a877-aa03-418e-8d6c-1e5f82d23c24",
+          "name": "Invalid Login",
+          "request": {
+            "description": {
+              "content": "Test invalid login credentials",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailAddress\": \"invalid@example.com\",\n  \"password\": \"wrongpassword\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Test invalid login credentials",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "auth",
+              "login"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "17488bb7-a89c-4ffa-b1c7-ab8198c2e847",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "74",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"emailAddress\": \"invalid@example.com\",\n  \"password\": \"wrongpassword\"\n}"
+          },
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "598362fd-61c1-49ca-a66b-434947734695",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "5;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "5"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "1"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "883"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-lQ62zpZfgtdJtpQAh9eSr7eGX5I\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:11 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              73,
+              110,
+              118,
+              97,
+              108,
+              105,
+              100,
+              32,
+              101,
+              109,
+              97,
+              105,
+              108,
+              32,
+              97,
+              100,
+              100,
+              114,
+              101,
+              115,
+              115,
+              32,
+              111,
+              114,
+              32,
+              112,
+              97,
+              115,
+              115,
+              119,
+              111,
+              114,
+              100,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 108,
+          "responseSize": 63
+        },
+        "id": "c707a877-aa03-418e-8d6c-1e5f82d23c24"
+      },
+      {
+        "cursor": {
+          "ref": "7f5ebb36-8b4c-449b-b40a-7c23ca5d4546",
+          "length": 20,
+          "cycles": 1,
+          "position": 18,
+          "iteration": 0,
+          "httpRequestId": "258e25db-b8c4-4ebe-a3b0-5f6b8ed38c54"
+        },
+        "item": {
+          "id": "af9f5d5a-2e28-4332-896f-54362444e46e",
+          "name": "Invalid Transaction Data",
+          "request": {
+            "description": {
+              "content": "Test transaction validation errors",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "transactions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transactionType\": \"invalid\",\n  \"amount\": -100,\n  \"description\": \"ab\"\n}"
+            }
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Test transaction validation errors",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "transactions"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "6feb804b-3d33-48ec-a0ee-f9e9b262c1ff",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            },
+            {
+              "key": "Content-Length",
+              "value": "75",
+              "system": true
+            }
+          ],
+          "method": "POST",
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"transactionType\": \"invalid\",\n  \"amount\": -100,\n  \"description\": \"ab\"\n}"
+          },
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "73930203-f8cf-4ea6-87cb-d049c127a925",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "82"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "882"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:12 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 4,
+          "responseSize": 63
+        },
+        "id": "af9f5d5a-2e28-4332-896f-54362444e46e"
+      },
+      {
+        "cursor": {
+          "ref": "957a5653-bc87-4284-85d2-250517421ba8",
+          "length": 20,
+          "cycles": 1,
+          "position": 19,
+          "iteration": 0,
+          "httpRequestId": "f4d2e986-6280-4f69-a832-9416a48145d9"
+        },
+        "item": {
+          "id": "68824b34-88a2-419e-9a57-5650d6144c44",
+          "name": "Unauthorized Access",
+          "request": {
+            "description": {
+              "content": "Test access without authentication token",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "users",
+                "profile"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": []
+        },
+        "request": {
+          "description": {
+            "content": "Test access without authentication token",
+            "type": "text/plain"
+          },
+          "url": {
+            "protocol": "http",
+            "port": "3000",
+            "path": [
+              "api",
+              "users",
+              "profile"
+            ],
+            "host": [
+              "localhost"
+            ],
+            "query": [],
+            "variable": []
+          },
+          "header": [
+            {
+              "key": "User-Agent",
+              "value": "PostmanRuntime/7.39.1",
+              "system": true
+            },
+            {
+              "key": "Accept",
+              "value": "*/*",
+              "system": true
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache",
+              "system": true
+            },
+            {
+              "key": "Postman-Token",
+              "value": "fe21e8e8-d878-4e07-81c2-d9861476f01b",
+              "system": true
+            },
+            {
+              "key": "Host",
+              "value": "localhost:3000",
+              "system": true
+            },
+            {
+              "key": "Accept-Encoding",
+              "value": "gzip, deflate, br",
+              "system": true
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive",
+              "system": true
+            }
+          ],
+          "method": "GET",
+          "auth": {
+            "type": "bearer",
+            "bearer": [
+              {
+                "type": "string",
+                "value": "",
+                "key": "token"
+              }
+            ]
+          }
+        },
+        "response": {
+          "id": "75ee3bad-39d1-4f5f-a916-2bd42aad7326",
+          "status": "Unauthorized",
+          "code": 401,
+          "header": [
+            {
+              "key": "Content-Security-Policy",
+              "value": "default-src 'self';style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;font-src 'self' https://fonts.gstatic.com;script-src 'self';img-src 'self' data: https:;base-uri 'self';form-action 'self';frame-ancestors 'self';object-src 'none';script-src-attr 'none';upgrade-insecure-requests"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Resource-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Origin-Agent-Cluster",
+              "value": "?1"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "no-referrer"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=15552000; includeSubDomains"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "X-DNS-Prefetch-Control",
+              "value": "off"
+            },
+            {
+              "key": "X-Download-Options",
+              "value": "noopen"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "SAMEORIGIN"
+            },
+            {
+              "key": "X-Permitted-Cross-Domain-Policies",
+              "value": "none"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "0"
+            },
+            {
+              "key": "RateLimit-Policy",
+              "value": "100;w=900"
+            },
+            {
+              "key": "RateLimit-Limit",
+              "value": "100"
+            },
+            {
+              "key": "RateLimit-Remaining",
+              "value": "81"
+            },
+            {
+              "key": "RateLimit-Reset",
+              "value": "881"
+            },
+            {
+              "key": "Vary",
+              "value": "Origin"
+            },
+            {
+              "key": "Access-Control-Allow-Credentials",
+              "value": "true"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json; charset=utf-8"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "ETag",
+              "value": "W/\"3f-y8SLTY/iIFOhV6YQ0m51m2/wHqo\""
+            },
+            {
+              "key": "Date",
+              "value": "Mon, 01 Sep 2025 16:45:13 GMT"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Keep-Alive",
+              "value": "timeout=5"
+            }
+          ],
+          "stream": {
+            "type": "Buffer",
+            "data": [
+              123,
+              34,
+              115,
+              117,
+              99,
+              99,
+              101,
+              115,
+              115,
+              34,
+              58,
+              102,
+              97,
+              108,
+              115,
+              101,
+              44,
+              34,
+              109,
+              101,
+              115,
+              115,
+              97,
+              103,
+              101,
+              34,
+              58,
+              34,
+              65,
+              99,
+              99,
+              101,
+              115,
+              115,
+              32,
+              100,
+              101,
+              110,
+              105,
+              101,
+              100,
+              46,
+              32,
+              78,
+              111,
+              32,
+              116,
+              111,
+              107,
+              101,
+              110,
+              32,
+              112,
+              114,
+              111,
+              118,
+              105,
+              100,
+              101,
+              100,
+              46,
+              34,
+              125
+            ]
+          },
+          "cookie": [],
+          "responseTime": 3,
+          "responseSize": 63
+        },
+        "id": "68824b34-88a2-419e-9a57-5650d6144c44"
+      }
+    ],
+    "transfers": {
+      "responseTotal": 1339
+    },
+    "failures": [],
+    "error": null
+  }
+}

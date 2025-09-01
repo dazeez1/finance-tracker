@@ -1,2 +1,8 @@
 node_modules/
 .env
+
+
+SWAGGER_GUIDE.md
+TRANSACTION_IMPLEMENTATION.md
+postman_test_runnerr.js
+POSTMAN_SETUP_GUIDE.md
