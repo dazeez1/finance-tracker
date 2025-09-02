@@ -17,18 +17,20 @@ const swaggerSpecs = require('./config/swagger');
 const app = express();
 
 // Security middleware
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      scriptSrc: ["'self'"],
-      imgSrc: ["'self'", "data:", "https:"],
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+        scriptSrc: ["'self'"],
+        imgSrc: ["'self'", 'data:', 'https:'],
+      },
     },
-  },
-  crossOriginEmbedderPolicy: false,
-}));
+    crossOriginEmbedderPolicy: false,
+  })
+);
 
 // Rate limiting with different limits for different endpoints
 const generalLimiter = rateLimit({
@@ -36,7 +38,7 @@ const generalLimiter = rateLimit({
   max: 100, // limit each IP to 100 requests per windowMs
   message: {
     success: false,
-    message: 'Too many requests from this IP, please try again later.'
+    message: 'Too many requests from this IP, please try again later.',
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -47,7 +49,7 @@ const authLimiter = rateLimit({
   max: 5, // limit each IP to 5 auth requests per windowMs
   message: {
     success: false,
-    message: 'Too many authentication attempts, please try again later.'
+    message: 'Too many authentication attempts, please try again later.',
   },
   standardHeaders: true,
   legacyHeaders: false,
@@ -57,12 +59,15 @@ app.use('/api/', generalLimiter);
 app.use('/api/auth', authLimiter);
 
 // CORS configuration
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://yourdomain.com'] 
-    : ['http://localhost:3000', 'http://localhost:5000'],
-  credentials: true
-}));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'production'
+        ? ['https://yourdomain.com']
+        : ['http://localhost:3000', 'http://localhost:5000'],
+    credentials: true,
+  })
+);
 
 // Body parsing middleware with input sanitization
 app.use(express.json({ limit: '10mb' }));
@@ -78,7 +83,7 @@ app.use((request, response, next) => {
       }
     });
   }
-  
+
   // Sanitize query parameters
   if (request.query) {
     Object.keys(request.query).forEach(key => {
@@ -87,13 +92,15 @@ app.use((request, response, next) => {
       }
     });
   }
-  
+
   next();
 });
 
 // Request logging middleware
 app.use((request, response, next) => {
-  console.log(`${new Date().toISOString()} - ${request.method} ${request.path}`);
+  console.log(
+    `${new Date().toISOString()} - ${request.method} ${request.path}`
+  );
   next();
 });
 
@@ -103,58 +110,48 @@ app.get('/health', (request, response) => {
     success: true,
     message: 'Finance Tracker API is running',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV || 'development'
+    environment: process.env.NODE_ENV || 'development',
   });
 });
 
 // Swagger UI setup
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpecs, {
-  customCss: '.swagger-ui .topbar { display: none }',
-  customSiteTitle: 'Finance Tracker API Documentation',
-  customfavIcon: '/favicon.ico',
-  swaggerOptions: {
-    persistAuthorization: true,
-    displayRequestDuration: true,
-    filter: true,
-    showExtensions: true,
-    showCommonExtensions: true
-  }
-}));
+app.use(
+  '/api-docs',
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpecs, {
+    customCss: '.swagger-ui .topbar { display: none }',
+    customSiteTitle: 'Finance Tracker API Documentation',
+    customfavIcon: '/favicon.ico',
+    swaggerOptions: {
+      persistAuthorization: true,
+      displayRequestDuration: true,
+      filter: true,
+      showExtensions: true,
+      showCommonExtensions: true,
+    },
+  })
+);
 
 // API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/transactions', transactionRoutes);
 
-// 404 handler
-app.use('*', (request, response) => {
-  response.status(404).json({
-    success: false,
-    message: 'API endpoint not found',
-    availableEndpoints: {
-      health: 'GET /health',
-      apiDocs: 'GET /api-docs',
-      auth: {
-        signup: 'POST /api/auth/signup',
-        login: 'POST /api/auth/login',
-        profile: 'GET /api/auth/profile'
-      },
-      users: {
-        profile: 'GET /api/users/profile',
-        updateProfile: 'PUT /api/users/profile',
-        balance: 'GET /api/users/balance',
-        updateBalance: 'PUT /api/users/balance'
-      },
-      transactions: {
-        create: 'POST /api/transactions',
-        getAll: 'GET /api/transactions',
-        getById: 'GET /api/transactions/:id',
-        update: 'PUT /api/transactions/:id',
-        delete: 'DELETE /api/transactions/:id',
-        stats: 'GET /api/transactions/stats'
-      }
-    }
-  });
+// Serve static frontend files
+app.use(express.static('public'));
+
+// Serve frontend for all non-API routes
+app.get('*', (request, response) => {
+  // Skip API routes and health check
+  if (request.path.startsWith('/api') || request.path === '/health') {
+    return response.status(404).json({
+      success: false,
+      message: 'API endpoint not found',
+    });
+  }
+
+  // Serve the frontend HTML file
+  response.sendFile('index.html', { root: 'public' });
 });
 
 // Global error handler
@@ -163,11 +160,13 @@ app.use((error, request, response, next) => {
 
   // Mongoose validation error
   if (error.name === 'ValidationError') {
-    const validationErrors = Object.values(error.errors).map(err => err.message);
+    const validationErrors = Object.values(error.errors).map(
+      err => err.message
+    );
     return response.status(400).json({
       success: false,
       message: 'Validation failed',
-      errors: validationErrors
+      errors: validationErrors,
     });
   }
 
@@ -175,7 +174,7 @@ app.use((error, request, response, next) => {
   if (error.code === 11000) {
     return response.status(400).json({
       success: false,
-      message: 'Duplicate field value entered'
+      message: 'Duplicate field value entered',
     });
   }
 
@@ -183,14 +182,14 @@ app.use((error, request, response, next) => {
   if (error.name === 'JsonWebTokenError') {
     return response.status(401).json({
       success: false,
-      message: 'Invalid token'
+      message: 'Invalid token',
     });
   }
 
   if (error.name === 'TokenExpiredError') {
     return response.status(401).json({
       success: false,
-      message: 'Token expired'
+      message: 'Token expired',
     });
   }
 
@@ -198,7 +197,7 @@ app.use((error, request, response, next) => {
   response.status(error.status || 500).json({
     success: false,
     message: error.message || 'Internal server error',
-    ...(process.env.NODE_ENV === 'development' && { stack: error.stack })
+    ...(process.env.NODE_ENV === 'development' && { stack: error.stack }),
   });
 });
 
