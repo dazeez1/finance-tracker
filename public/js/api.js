@@ -1,7 +1,16 @@
 // API Service - Handles all backend communication
 class ApiService {
   constructor() {
-    this.baseURL = '/api';
+    // Auto-detect environment and set appropriate base URL
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      // Local development
+      this.baseURL = '/api';
+    } else {
+      // Production (Render, Heroku, etc.)
+      this.baseURL = `${window.location.origin}/api`;
+    }
+    
+    console.log('🌐 API Base URL:', this.baseURL);
     this.token = localStorage.getItem('token');
   }
 
@@ -17,6 +26,12 @@ class ApiService {
     localStorage.removeItem('token');
   }
 
+  // Update base URL (useful for environment changes)
+  updateBaseURL(newBaseURL) {
+    this.baseURL = newBaseURL;
+    console.log('🔄 API Base URL updated to:', this.baseURL);
+  }
+
   // Get headers for authenticated requests
   getHeaders() {
     const headers = {
@@ -30,10 +45,29 @@ class ApiService {
     return headers;
   }
 
+  // Test API connection
+  async testConnection() {
+    try {
+      const response = await fetch(`${this.baseURL.replace('/api', '')}/health`);
+      if (response.ok) {
+        console.log('✅ API connection successful');
+        return true;
+      } else {
+        console.log('❌ API connection failed:', response.status);
+        return false;
+      }
+    } catch (error) {
+      console.error('❌ API connection error:', error);
+      return false;
+    }
+  }
+
   // Generic request method
   async request(endpoint, options = {}) {
     try {
       const url = `${this.baseURL}${endpoint}`;
+      console.log('🌐 Making API request to:', url);
+      
       const config = {
         headers: this.getHeaders(),
         ...options,

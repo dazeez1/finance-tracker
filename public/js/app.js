@@ -41,6 +41,9 @@ class FinanceTrackerApp {
 
   // Check initial application state
   checkInitialState() {
+    // Test API connection first
+    this.testAPIConnection();
+    
     // Check if user is authenticated
     if (authManager.isUserAuthenticated()) {
       // User is logged in, ensure dashboard is visible
@@ -48,6 +51,18 @@ class FinanceTrackerApp {
     } else {
       // User is not logged in, show login form
       authManager.showLoginForm();
+    }
+  }
+
+  // Test API connection
+  async testAPIConnection() {
+    try {
+      const isConnected = await apiService.testConnection();
+      if (!isConnected) {
+        console.warn('⚠️ API connection test failed - some features may not work');
+      }
+    } catch (error) {
+      console.error('❌ API connection test error:', error);
     }
   }
 

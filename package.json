@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "echo 'Frontend is already built and ready'",
+    "build": "echo 'Frontend is already built and ready' && npm run deploy:check",
+    "postinstall": "echo 'Ensuring public directory exists'",
     "test": "jest",
     "test:postman": "node postman_test_runner.js",
     "lint": "eslint .",
