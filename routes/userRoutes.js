@@ -5,12 +5,12 @@ const {
   getUserProfileAndBalance,
   updateUserProfile,
   getCurrentBalance,
-  updateUserBalance
+  updateUserBalance,
 } = require('../controllers/userController');
 
 const {
   validateProfileUpdate,
-  validateBalanceUpdate
+  validateBalanceUpdate,
 } = require('../middleware/validationMiddleware');
 
 const { protectRoute } = require('../middleware/authMiddleware');
@@ -84,9 +84,9 @@ router.get('/profile', getUserProfileAndBalance);
  *                 description: User's full name (letters and spaces only)
  *               accountType:
  *                 type: string
- *                 enum: [personal, business, savings]
- *                 example: "business"
- *                 description: Type of account
+ *                 enum: [debit, credit]
+ *                 example: "debit"
+ *                 description: Type of account (debit or credit)
  *     responses:
  *       200:
  *         description: Profile updated successfully

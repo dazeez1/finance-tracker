@@ -1,15 +1,9 @@
 // API Service - Handles all backend communication
 class ApiService {
   constructor() {
-    // Auto-detect environment and set appropriate base URL
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      // Local development
-      this.baseURL = '/api';
-    } else {
-      // Production (Render, Heroku, etc.)
-      this.baseURL = `${window.location.origin}/api`;
-    }
-    
+    // HARD FIX: Set exact URL for Render hosting
+    this.baseURL = 'https://finance-tracker-fc5u.onrender.com/api';
+
     console.log('🌐 API Base URL:', this.baseURL);
     this.token = localStorage.getItem('token');
   }
@@ -48,7 +42,9 @@ class ApiService {
   // Test API connection
   async testConnection() {
     try {
-      const response = await fetch(`${this.baseURL.replace('/api', '')}/health`);
+      const response = await fetch(
+        'https://finance-tracker-fc5u.onrender.com/health'
+      );
       if (response.ok) {
         console.log('✅ API connection successful');
         return true;
@@ -65,14 +61,17 @@ class ApiService {
   // Test signup data with debug endpoint
   async testSignupData(signupData) {
     try {
-      const response = await fetch(`${this.baseURL.replace('/api', '')}/debug/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(signupData),
-      });
-      
+      const response = await fetch(
+        'https://finance-tracker-fc5u.onrender.com/debug/signup',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(signupData),
+        }
+      );
+
       const data = await response.json();
       console.log('🔍 Debug signup response:', data);
       return data;
@@ -87,7 +86,7 @@ class ApiService {
     try {
       const url = `${this.baseURL}${endpoint}`;
       console.log('🌐 Making API request to:', url);
-      
+
       const config = {
         headers: this.getHeaders(),
         ...options,

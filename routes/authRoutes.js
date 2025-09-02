@@ -4,12 +4,12 @@ const router = express.Router();
 const {
   registerNewUser,
   authenticateUserLogin,
-  getCurrentUserProfile
+  getCurrentUserProfile,
 } = require('../controllers/authController');
 
 const {
   validateUserRegistration,
-  validateUserLogin
+  validateUserLogin,
 } = require('../middleware/validationMiddleware');
 
 const { protectRoute } = require('../middleware/authMiddleware');
@@ -46,15 +46,14 @@ const { protectRoute } = require('../middleware/authMiddleware');
  *                 description: User's email address
  *               accountType:
  *                 type: string
- *                 enum: [personal, business, savings]
- *                 example: "personal"
- *                 description: Type of account
+ *                 enum: [debit, credit]
+ *                 example: "debit"
+ *                 description: Type of account (debit or credit)
  *               password:
  *                 type: string
- *                 minLength: 6
- *                 pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)'
- *                 example: "SecurePass123"
- *                 description: Password (min 6 chars, must contain lowercase, uppercase, and number)
+ *                 minLength: 3
+ *                 example: "123"
+ *                 description: Password (minimum 3 characters)
  *     responses:
  *       201:
  *         description: User account created successfully

@@ -58,11 +58,11 @@
                 placeholder="Email"
                 required
               />
-                             <select id="signupAccountType" required>
-                 <option value="">Select Account Type</option>
-                 <option value="debit">Debit</option>
-                 <option value="credit">Credit</option>
-               </select>
+              <select id="signupAccountType" required>
+                <option value="">Select Account Type</option>
+                <option value="debit">Debit</option>
+                <option value="credit">Credit</option>
+              </select>
               <input
                 type="password"
                 id="signupPassword"
@@ -76,6 +76,13 @@
                 style="background: #f39c12; margin-top: 0.5rem"
               >
                 Debug Signup
+              </button>
+              <button
+                type="button"
+                id="testDbBtn"
+                style="background: #9b59b6; margin-top: 0.5rem"
+              >
+                Test Database
               </button>
             </form>
           </div>
@@ -178,10 +185,10 @@
                 placeholder="Full Name"
                 required
               />
-                             <select id="editAccountType" required>
-                 <option value="debit">Debit</option>
-                 <option value="credit">Credit</option>
-               </select>
+              <select id="editAccountType" required>
+                <option value="debit">Debit</option>
+                <option value="credit">Credit</option>
+              </select>
               <button type="submit">Update Profile</button>
               <button type="button" id="cancelProfileEditBtn">Cancel</button>
             </form>

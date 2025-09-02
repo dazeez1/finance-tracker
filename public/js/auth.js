@@ -53,14 +53,19 @@ class AuthManager {
       this.showSignupForm();
     });
 
-            document.getElementById('logoutBtn').addEventListener('click', () => {
-          this.logout();
-        });
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      this.logout();
+    });
 
-        // Debug signup button
-        document.getElementById('debugSignupBtn').addEventListener('click', () => {
-          this.debugSignup();
-        });
+    // Debug signup button
+    document.getElementById('debugSignupBtn').addEventListener('click', () => {
+      this.debugSignup();
+    });
+
+    // Test database button
+    document.getElementById('testDbBtn').addEventListener('click', () => {
+      this.testDatabase();
+    });
   }
 
   // Show login form
@@ -111,7 +116,10 @@ class AuthManager {
 
     // Client-side validation
     if (!fullName || fullName.length < 2) {
-      this.showNotification('Full name must be at least 2 characters long', 'error');
+      this.showNotification(
+        'Full name must be at least 2 characters long',
+        'error'
+      );
       return;
     }
 
@@ -126,7 +134,10 @@ class AuthManager {
     }
 
     if (!password || password.length < 3) {
-      this.showNotification('Password must be at least 3 characters long', 'error');
+      this.showNotification(
+        'Password must be at least 3 characters long',
+        'error'
+      );
       return;
     }
 
@@ -137,9 +148,12 @@ class AuthManager {
         accountType,
         password,
       };
-      
-      console.log('📝 Sending signup data:', { ...signupData, password: '***' });
-      
+
+      console.log('📝 Sending signup data:', {
+        ...signupData,
+        password: '***',
+      });
+
       const response = await apiService.signup(signupData);
 
       if (response.success) {
@@ -155,21 +169,22 @@ class AuthManager {
     } catch (error) {
       // Show more detailed error information
       let errorMessage = 'Signup failed';
-      
+
       if (error.message) {
         errorMessage = error.message;
-        
+
         // Handle specific error cases
         if (error.message.includes('already exists')) {
-          errorMessage = 'An account with this email already exists. Please login instead.';
+          errorMessage =
+            'An account with this email already exists. Please login instead.';
         } else if (error.message.includes('Validation failed')) {
           errorMessage = 'Please check your input and try again.';
         }
       }
-      
+
       // Log the full error for debugging
       console.error('Signup error details:', error);
-      
+
       this.showNotification(errorMessage, 'error');
     }
   }
@@ -189,15 +204,37 @@ class AuthManager {
     };
 
     console.log('🔍 Testing signup data:', { ...signupData, password: '***' });
-    
+
     try {
       const debugResponse = await apiService.testSignupData(signupData);
       if (debugResponse) {
         this.showNotification('Debug data sent - check console', 'success');
+        console.log('🔍 Debug response:', debugResponse);
       }
     } catch (error) {
       console.error('Debug signup error:', error);
       this.showNotification('Debug failed', 'error');
+    }
+  }
+
+  // Test database connection
+  async testDatabase() {
+    try {
+      const response = await fetch(
+        'https://finance-tracker-fc5u.onrender.com/test-db'
+      );
+      const data = await response.json();
+
+      console.log('🗄️ Database test result:', data);
+
+      if (data.success) {
+        this.showNotification(`Database: ${data.connectionState}`, 'success');
+      } else {
+        this.showNotification('Database test failed', 'error');
+      }
+    } catch (error) {
+      console.error('Database test error:', error);
+      this.showNotification('Database test failed', 'error');
     }
   }
 

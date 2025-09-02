@@ -7,20 +7,20 @@ const registerNewUser = async (request, response) => {
     const { fullName, emailAddress, accountType, password } = request.body;
 
     // Check if user already exists
-    const existingUser = await User.findByEmail(emailAddress);
-    if (existingUser) {
-      return response.status(400).json({
-        success: false,
-        message: 'An account with this email address already exists'
-      });
-    }
+    // const existingUser = await User.findByEmail(emailAddress);
+    // if (existingUser) {
+    //   return response.status(400).json({
+    //     success: false,
+    //     message: 'An account with this email address already exists',
+    //   });
+    // }
 
     // Create new user
     const newUser = new User({
       fullName,
       emailAddress,
       accountType,
-      passwordHash: password // Will be hashed by pre-save middleware
+      passwordHash: password, // Will be hashed by pre-save middleware
     });
 
     await newUser.save();
@@ -40,7 +40,7 @@ const registerNewUser = async (request, response) => {
       accountType: newUser.accountType,
       currentBalance: newUser.currentBalance,
       accountCreatedDate: newUser.accountCreatedDate,
-      accountAge: newUser.accountAge
+      accountAge: newUser.accountAge,
     };
 
     response.status(201).json({
@@ -48,23 +48,34 @@ const registerNewUser = async (request, response) => {
       message: 'Account created successfully! Welcome to Finance Tracker.',
       data: {
         user: userData,
-        authToken
-      }
+        authToken,
+      },
     });
-
   } catch (error) {
-    console.error('User registration error:', error.message);
-    
+    console.error('User registration error:', error);
+    console.error('Error stack:', error.stack);
+
     if (error.code === 11000) {
       return response.status(400).json({
         success: false,
-        message: 'An account with this email address already exists'
+        message: 'An account with this email address already exists',
+      });
+    }
+
+    // Log the specific error for debugging
+    if (error.name === 'ValidationError') {
+      console.error('Validation errors:', error.errors);
+      return response.status(400).json({
+        success: false,
+        message: 'Validation failed',
+        errors: Object.values(error.errors).map(err => err.message),
       });
     }
 
     response.status(500).json({
       success: false,
-      message: 'Failed to create account. Please try again.'
+      message: 'Failed to create account. Please try again.',
+      debug: process.env.NODE_ENV === 'development' ? error.message : undefined,
     });
   }
 };
@@ -79,7 +90,7 @@ const authenticateUserLogin = async (request, response) => {
     if (!userAccount) {
       return response.status(401).json({
         success: false,
-        message: 'Invalid email address or password'
+        message: 'Invalid email address or password',
       });
     }
 
@@ -87,7 +98,7 @@ const authenticateUserLogin = async (request, response) => {
     if (!userAccount.isAccountActive) {
       return response.status(401).json({
         success: false,
-        message: 'Account is deactivated. Please contact support.'
+        message: 'Account is deactivated. Please contact support.',
       });
     }
 
@@ -96,7 +107,7 @@ const authenticateUserLogin = async (request, response) => {
     if (!isPasswordValid) {
       return response.status(401).json({
         success: false,
-        message: 'Invalid email address or password'
+        message: 'Invalid email address or password',
       });
     }
 
@@ -115,7 +126,7 @@ const authenticateUserLogin = async (request, response) => {
       accountType: userAccount.accountType,
       currentBalance: userAccount.currentBalance,
       lastLoginDate: userAccount.lastLoginDate,
-      accountAge: userAccount.accountAge
+      accountAge: userAccount.accountAge,
     };
 
     response.status(200).json({
@@ -123,15 +134,14 @@ const authenticateUserLogin = async (request, response) => {
       message: 'Login successful! Welcome back.',
       data: {
         user: userData,
-        authToken
-      }
+        authToken,
+      },
     });
-
   } catch (error) {
     console.error('User login error:', error.message);
     response.status(500).json({
       success: false,
-      message: 'Login failed. Please try again.'
+      message: 'Login failed. Please try again.',
     });
   }
 };
@@ -150,22 +160,21 @@ const getCurrentUserProfile = async (request, response) => {
       lastLoginDate: userProfile.lastLoginDate,
       accountCreatedDate: userProfile.accountCreatedDate,
       accountAge: userProfile.accountAge,
-      isAccountActive: userProfile.isAccountActive
+      isAccountActive: userProfile.isAccountActive,
     };
 
     response.status(200).json({
       success: true,
       message: 'Profile retrieved successfully',
       data: {
-        user: profileData
-      }
+        user: profileData,
+      },
     });
-
   } catch (error) {
     console.error('Get profile error:', error.message);
     response.status(500).json({
       success: false,
-      message: 'Failed to retrieve profile. Please try again.'
+      message: 'Failed to retrieve profile. Please try again.',
     });
   }
 };
@@ -173,5 +182,5 @@ const getCurrentUserProfile = async (request, response) => {
 module.exports = {
   registerNewUser,
   authenticateUserLogin,
-  getCurrentUserProfile
+  getCurrentUserProfile,
 };

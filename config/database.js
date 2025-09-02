@@ -2,14 +2,20 @@ const mongoose = require('mongoose');
 
 const connectDatabase = async () => {
   try {
-    const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/finance_tracker';
-    
+    const connectionString =
+      process.env.MONGODB_URI || 'mongodb://localhost:27017/Finance-tracker';
+
+    console.log(
+      '🔗 Connecting to MongoDB:',
+      connectionString.replace(/\/\/[^:]+:[^@]+@/, '//***:***@')
+    );
+
     await mongoose.connect(connectionString);
 
     console.log('✅ MongoDB connected successfully');
-    
+
     // Handle connection events
-    mongoose.connection.on('error', (error) => {
+    mongoose.connection.on('error', error => {
       console.error('❌ MongoDB connection error:', error);
     });
 
@@ -23,7 +29,6 @@ const connectDatabase = async () => {
       console.log('🔄 MongoDB connection closed through app termination');
       process.exit(0);
     });
-
   } catch (error) {
     console.error('❌ Failed to connect to MongoDB:', error.message);
     process.exit(1);
