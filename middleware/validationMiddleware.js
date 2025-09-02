@@ -34,14 +34,12 @@ const validateUserRegistration = [
     .normalizeEmail(),
   
   body('accountType')
-    .isIn(['personal', 'business', 'savings'])
-    .withMessage('Account type must be personal, business, or savings'),
+    .isIn(['debit', 'credit'])
+    .withMessage('Account type must be debit or credit'),
   
   body('password')
-    .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long')
-    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
-    .withMessage('Password must contain at least one lowercase letter, one uppercase letter, and one number'),
+    .isLength({ min: 3 })
+    .withMessage('Password must be at least 3 characters long'),
   
   handleValidationErrors
 ];
@@ -144,8 +142,8 @@ const validateProfileUpdate = [
   
   body('accountType')
     .optional()
-    .isIn(['personal', 'business', 'savings'])
-    .withMessage('Account type must be personal, business, or savings'),
+    .isIn(['debit', 'credit'])
+    .withMessage('Account type must be debit or credit'),
   
   handleValidationErrors
 ];

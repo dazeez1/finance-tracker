@@ -125,18 +125,8 @@ class AuthManager {
       return;
     }
 
-    if (!password || password.length < 6) {
-      this.showNotification('Password must be at least 6 characters long', 'error');
-      return;
-    }
-
-    // Check password complexity
-    const hasLower = /[a-z]/.test(password);
-    const hasUpper = /[A-Z]/.test(password);
-    const hasNumber = /\d/.test(password);
-    
-    if (!hasLower || !hasUpper || !hasNumber) {
-      this.showNotification('Password must contain lowercase, uppercase, and number', 'error');
+    if (!password || password.length < 3) {
+      this.showNotification('Password must be at least 3 characters long', 'error');
       return;
     }
 
@@ -168,6 +158,13 @@ class AuthManager {
       
       if (error.message) {
         errorMessage = error.message;
+        
+        // Handle specific error cases
+        if (error.message.includes('already exists')) {
+          errorMessage = 'An account with this email already exists. Please login instead.';
+        } else if (error.message.includes('Validation failed')) {
+          errorMessage = 'Please check your input and try again.';
+        }
       }
       
       // Log the full error for debugging
