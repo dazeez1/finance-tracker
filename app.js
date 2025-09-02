@@ -114,6 +114,19 @@ app.get('/health', (request, response) => {
   });
 });
 
+// Debug endpoint to test validation
+app.post('/debug/signup', (request, response) => {
+  console.log('🔍 Debug signup request body:', request.body);
+  console.log('🔍 Debug signup request headers:', request.headers);
+  
+  response.status(200).json({
+    success: true,
+    message: 'Debug endpoint - check server logs',
+    receivedData: request.body,
+    headers: request.headers
+  });
+});
+
 // Swagger UI setup
 app.use(
   '/api-docs',

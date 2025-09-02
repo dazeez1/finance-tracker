@@ -62,6 +62,26 @@ class ApiService {
     }
   }
 
+  // Test signup data with debug endpoint
+  async testSignupData(signupData) {
+    try {
+      const response = await fetch(`${this.baseURL.replace('/api', '')}/debug/signup`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(signupData),
+      });
+      
+      const data = await response.json();
+      console.log('🔍 Debug signup response:', data);
+      return data;
+    } catch (error) {
+      console.error('❌ Debug signup error:', error);
+      return null;
+    }
+  }
+
   // Generic request method
   async request(endpoint, options = {}) {
     try {

@@ -53,9 +53,14 @@ class AuthManager {
       this.showSignupForm();
     });
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-      this.logout();
-    });
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+          this.logout();
+        });
+
+        // Debug signup button
+        document.getElementById('debugSignupBtn').addEventListener('click', () => {
+          this.debugSignup();
+        });
   }
 
   // Show login form
@@ -99,18 +104,53 @@ class AuthManager {
 
   // Handle user signup
   async handleSignup() {
-    const fullName = document.getElementById('signupName').value;
-    const email = document.getElementById('signupEmail').value;
+    const fullName = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
     const accountType = document.getElementById('signupAccountType').value;
     const password = document.getElementById('signupPassword').value;
 
+    // Client-side validation
+    if (!fullName || fullName.length < 2) {
+      this.showNotification('Full name must be at least 2 characters long', 'error');
+      return;
+    }
+
+    if (!email || !email.includes('@')) {
+      this.showNotification('Please enter a valid email address', 'error');
+      return;
+    }
+
+    if (!accountType) {
+      this.showNotification('Please select an account type', 'error');
+      return;
+    }
+
+    if (!password || password.length < 6) {
+      this.showNotification('Password must be at least 6 characters long', 'error');
+      return;
+    }
+
+    // Check password complexity
+    const hasLower = /[a-z]/.test(password);
+    const hasUpper = /[A-Z]/.test(password);
+    const hasNumber = /\d/.test(password);
+    
+    if (!hasLower || !hasUpper || !hasNumber) {
+      this.showNotification('Password must contain lowercase, uppercase, and number', 'error');
+      return;
+    }
+
     try {
-      const response = await apiService.signup({
+      const signupData = {
         fullName,
         emailAddress: email,
         accountType,
         password,
-      });
+      };
+      
+      console.log('📝 Sending signup data:', { ...signupData, password: '***' });
+      
+      const response = await apiService.signup(signupData);
 
       if (response.success) {
         this.showNotification(
@@ -123,7 +163,44 @@ class AuthManager {
         document.getElementById('signupFormElement').reset();
       }
     } catch (error) {
-      this.showNotification(error.message || 'Signup failed', 'error');
+      // Show more detailed error information
+      let errorMessage = 'Signup failed';
+      
+      if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      // Log the full error for debugging
+      console.error('Signup error details:', error);
+      
+      this.showNotification(errorMessage, 'error');
+    }
+  }
+
+  // Debug signup method
+  async debugSignup() {
+    const fullName = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim();
+    const accountType = document.getElementById('signupAccountType').value;
+    const password = document.getElementById('signupPassword').value;
+
+    const signupData = {
+      fullName,
+      emailAddress: email,
+      accountType,
+      password,
+    };
+
+    console.log('🔍 Testing signup data:', { ...signupData, password: '***' });
+    
+    try {
+      const debugResponse = await apiService.testSignupData(signupData);
+      if (debugResponse) {
+        this.showNotification('Debug data sent - check console', 'success');
+      }
+    } catch (error) {
+      console.error('Debug signup error:', error);
+      this.showNotification('Debug failed', 'error');
     }
   }
 
