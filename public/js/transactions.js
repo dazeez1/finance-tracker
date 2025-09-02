@@ -70,6 +70,20 @@ class TransactionManager {
   hideTransactionForm() {
     document.getElementById('transactionForm').classList.add('hidden');
     document.getElementById('transactionFormElement').reset();
+    
+    // Reset form to create mode
+    const form = document.getElementById('transactionFormElement');
+    const submitBtn = form.querySelector('button[type="submit"]');
+    submitBtn.textContent = 'Add Transaction';
+    
+    // Remove edit mode
+    delete form.dataset.editId;
+    
+    // Reset form submission handler
+    form.onsubmit = e => {
+      e.preventDefault();
+      this.handleCreateTransaction();
+    };
   }
 
   // Show transactions list
@@ -189,10 +203,22 @@ class TransactionManager {
                 <p>Balance: $${transaction.balanceAfter.toFixed(2)}</p>
             </div>
             <div class="transaction-actions">
-                <button class="edit-btn" onclick="transactionManager.editTransaction('${transaction.transactionId}')">Edit</button>
-                <button class="delete-btn" onclick="transactionManager.deleteTransaction('${transaction.transactionId}')">Delete</button>
+                <button class="edit-btn" data-transaction-id="${transaction.transactionId}">Edit</button>
+                <button class="delete-btn" data-transaction-id="${transaction.transactionId}">Delete</button>
             </div>
         `;
+
+    // Add event listeners for edit and delete buttons
+    const editBtn = div.querySelector('.edit-btn');
+    const deleteBtn = div.querySelector('.delete-btn');
+
+    editBtn.addEventListener('click', () => {
+      this.editTransaction(transaction.transactionId);
+    });
+
+    deleteBtn.addEventListener('click', () => {
+      this.deleteTransaction(transaction.transactionId);
+    });
 
     return div;
   }
