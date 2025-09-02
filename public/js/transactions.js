@@ -25,9 +25,7 @@ class TransactionManager {
         this.showTransactionsList();
       });
 
-    document.getElementById('viewStatsBtn').addEventListener('click', () => {
-      this.showStatistics();
-    });
+
 
     // Transaction form
     document
@@ -81,18 +79,12 @@ class TransactionManager {
     this.loadTransactions();
   }
 
-  // Show statistics
-  showStatistics() {
-    this.hideAllSections();
-    document.getElementById('statistics').classList.remove('hidden');
-    this.loadStatistics();
-  }
+
 
   // Hide all sections
   hideAllSections() {
     document.getElementById('transactionForm').classList.add('hidden');
     document.getElementById('transactionsList').classList.add('hidden');
-    document.getElementById('statistics').classList.add('hidden');
     document.getElementById('profileEditForm').classList.add('hidden');
   }
 
@@ -243,57 +235,9 @@ class TransactionManager {
     this.loadTransactions();
   }
 
-  // Load statistics
-  async loadStatistics() {
-    try {
-      const response = await apiService.getTransactionStats(
-        this.currentFilters
-      );
 
-      if (response.success) {
-        this.displayStatistics(response.data.statistics);
-      }
-    } catch (error) {
-      authManager.showNotification(
-        error.message || 'Failed to load statistics',
-        'error'
-      );
-    }
-  }
 
-  // Display statistics
-  displayStatistics(stats) {
-    const container = document.getElementById('statsContainer');
 
-    container.innerHTML = `
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value">${stats.totalTransactions}</div>
-                    <div class="stat-label">Total Transactions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${stats.creditTransactions.count}</div>
-                    <div class="stat-label">Income Transactions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">${stats.debitTransactions.count}</div>
-                    <div class="stat-label">Expense Transactions</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">$${stats.netAmount.toFixed(2)}</div>
-                    <div class="stat-label">Net Amount</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">$${stats.creditTransactions.totalAmount.toFixed(2)}</div>
-                    <div class="stat-label">Total Income</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value">$${stats.debitTransactions.totalAmount.toFixed(2)}</div>
-                    <div class="stat-label">Total Expenses</div>
-                </div>
-            </div>
-        `;
-  }
 
   // Edit transaction
   async editTransaction(transactionId) {

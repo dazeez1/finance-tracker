@@ -94,7 +94,7 @@ class AuthManager {
       });
 
       if (response.success) {
-        apiService.setToken(response.data.token);
+        apiService.setToken(response.data.authToken);
         this.setCurrentUser(response.data.user);
         this.showDashboard();
         this.showNotification('Login successful!', 'success');

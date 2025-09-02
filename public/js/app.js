@@ -185,51 +185,7 @@ class FinanceTrackerApp {
     }
   }
 
-  // Export application data
-  async exportData() {
-    if (!authManager.isUserAuthenticated()) {
-      return null;
-    }
 
-    try {
-      const [transactions, profile, balance] = await Promise.all([
-        apiService.getTransactions({ limit: 1000 }), // Get all transactions
-        apiService.getUserProfile(),
-        apiService.getCurrentBalance(),
-      ]);
-
-      const exportData = {
-        exportDate: new Date().toISOString(),
-        user: profile.data.user,
-        balance: balance.data.currentBalance,
-        transactions: transactions.data.transactions,
-      };
-
-      return exportData;
-    } catch (error) {
-      console.error('Failed to export data:', error);
-      return null;
-    }
-  }
-
-  // Download data as JSON
-  async downloadData() {
-    const data = await this.exportData();
-    if (!data) {
-      authManager.showNotification('Failed to export data', 'error');
-      return;
-    }
-
-    const dataStr = JSON.stringify(data, null, 2);
-    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(dataBlob);
-    link.download = `finance-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
-    link.click();
-
-    authManager.showNotification('Data exported successfully', 'success');
-  }
 
   // Reset application state
   resetAppState() {
@@ -251,17 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Load saved app state
   window.financeTrackerApp.loadAppState();
 
-  // Add export button to dashboard if needed
-  const quickActions = document.querySelector('.quick-actions');
-  if (quickActions) {
-    const exportBtn = document.createElement('button');
-    exportBtn.className = 'action-btn';
-    exportBtn.textContent = 'Export Data';
-    exportBtn.addEventListener('click', () => {
-      window.financeTrackerApp.downloadData();
-    });
-    quickActions.appendChild(exportBtn);
-  }
+
 });
 
 // Global error handler
